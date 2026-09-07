@@ -1,0 +1,19 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+  command = "npm install"
+
+# Route all API calls to the Express app running as a Netlify Function.
+# The function's Express app mounts every route at both '/api/*' and '/*',
+# so this works regardless of whether Netlify strips the function-name
+# prefix from the forwarded path.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+[functions]
+  node_bundler = "esbuild"
+
+[functions."scheduled-tick"]
+  schedule = "* * * * *"
